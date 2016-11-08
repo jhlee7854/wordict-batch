@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.pe.jady.store.batch.job.mapper.summary.DailyTransactionSummaryWriteMapper">
+    <insert id="saveDailyTransactionSummary" parameterType="dailyTransactionSummary">
+        INSERT INTO summary.daily_transaction_summary (
+          date,
+          type,
+          count,
+          amount
+        ) VALUES (
+          #{date},
+          #{type},
+          #{count},
+          #{amount}
+        )
+    </insert>
+</mapper>

@@ -1,0 +1,95 @@
+package kr.pe.jady.store.batch.job.config;
+
+import kr.pe.jady.store.batch.config.spring.app.*;
+import kr.pe.jady.store.batch.config.spring.batch.BatchConfig;
+import kr.pe.jady.store.batch.system.util.DateUtil;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.batch.core.*;
+import org.springframework.batch.core.launch.JobLauncher;
+import org.springframework.batch.core.repository.JobRepository;
+import org.springframework.batch.test.JobLauncherTestUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.jdbc.datasource.DriverManagerDataSource;
+import org.springframework.mock.jndi.SimpleNamingContextBuilder;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+
+import javax.naming.NamingException;
+
+import static org.junit.Assert.assertEquals;
+
+/**
+ * Created by jhlee7854 on 2016. 10. 28..
+ */
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(classes = {AppConfig.class})
+public class DailyTransactionSummaryJobTest {
+    private JobLauncherTestUtils jobLauncherTestUtils;
+
+    @Autowired
+    JobLauncher jobLauncher;
+
+    @Autowired
+    JobRepository jobRepository;
+
+    @Autowired
+    @Qualifier(DailyTransactionSummaryJobConfig.JOB_NAME)
+    Job job;
+
+    @BeforeClass
+    public static void setUpClass() throws NamingException {
+        SimpleNamingContextBuilder.emptyActivatedContextBuilder().bind("jdbc/batch", new DriverManagerDataSource("jdbc:h2:mem:testdb", "sa", ""));
+        SimpleNamingContextBuilder.getCurrentContextBuilder().bind("jdbc/readLog", new DriverManagerDataSource("jdbc:h2:mem:testdb", "sa", ""));
+        SimpleNamingContextBuilder.getCurrentContextBuilder().bind("jdbc/writeLog", new DriverManagerDataSource("jdbc:h2:mem:testdb", "sa", ""));
+        SimpleNamingContextBuilder.getCurrentContextBuilder().bind("jdbc/readSummary", new DriverManagerDataSource("jdbc:h2:mem:testdb", "sa", ""));
+        SimpleNamingContextBuilder.getCurrentContextBuilder().bind("jdbc/writeSummary", new DriverManagerDataSource("jdbc:h2:mem:testdb", "sa", ""));
+    }
+
+    @Before
+    public void setUp() {
+        jobLauncherTestUtils = new JobLauncherTestUtils();
+        jobLauncherTestUtils.setJob(job);
+        jobLauncherTestUtils.setJobLauncher(jobLauncher);
+        jobLauncherTestUtils.setJobRepository(jobRepository);
+    }
+
+    @Test
+    public void testDailyTransactionSummaryStep() {
+        JobExecution jobExecution = jobLauncherTestUtils.launchStep(DailyTransactionSummaryJobConfig.STEP_NAME);
+        jobExecution.getStepExecutions().forEach(stepExecution -> {
+            if (DailyTransactionSummaryJobConfig.STEP_NAME.equals(stepExecution.getStepName())) {
+                assertEquals("step read 건수", 2, stepExecution.getReadCount());
+                assertEquals("step write 건수", 2, stepExecution.getWriteCount());
+            }
+        });
+    }
+
+    @Test
+    public void testDailyTransactionSummaryJob() throws Exception {
+        JobExecution jobExecution = jobLauncherTestUtils.launchJob();
+        assertEquals("job 수행 성공 여부", BatchStatus.COMPLETED, jobExecution.getStatus());
+    }
+
+    @Test
+    public void testDailyTransactionSummaryStepWithParameter() throws Exception {
+        JobParameters jobParameters = new JobParametersBuilder().addString("inputDate", DateUtil.getYesterdayDateString()).toJobParameters();
+        JobExecution jobExecution = jobLauncherTestUtils.launchStep(DailyTransactionSummaryJobConfig.STEP_NAME, jobParameters);
+        jobExecution.getStepExecutions().forEach(stepExecution -> {
+            if (DailyTransactionSummaryJobConfig.STEP_NAME.equals(stepExecution.getStepName())) {
+                assertEquals("step read 건수", 1, stepExecution.getReadCount());
+                assertEquals("step write 건수", 1, stepExecution.getWriteCount());
+            }
+        });
+    }
+
+    @Test
+    public void testDailyTransactionSummaryJobWithParameter() throws Exception {
+        JobParameters jobParameters = new JobParametersBuilder().addString("inputDate", DateUtil.getYesterdayDateString()).toJobParameters();
+        JobExecution jobExecution = jobLauncherTestUtils.launchJob(jobParameters);
+        assertEquals("job 수행 성공 여부", BatchStatus.COMPLETED, jobExecution.getStatus());
+    }
+}

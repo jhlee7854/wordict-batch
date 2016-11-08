@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.pe.jady.store.batch.job.mapper.log.UserTransactionLogReadMapper">
+    <select id="getDailyTransactionSummary" parameterType="string" resultType="dailyTransactionSummary">
+        SELECT a.type, COUNT(a.type) AS count, SUM(a.amount) AS amount
+          FROM log.user_transaction_log a
+         WHERE a.created BETWEEN CONCAT(#{basicDate}, ' 00:00:00') AND CONCAT(#{basicDate}, ' 23:59:59')
+         GROUP BY a.type
+    </select>
+</mapper>
