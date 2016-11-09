@@ -17,19 +17,19 @@ public class SimpleJobParametersIncrementerTest {
     @Test
     public void testGetNextWithNullParameter() {
         JobParameters jobParameters = new SimpleJobParametersIncrementer().getNext(null);
-        assertEquals("", new Date().getTime(), jobParameters.getDate(RUN_DATE_PARAMETER).getTime(), 1000);
+        assertEquals("job 파라메터가 null이면 현재 일시를 job 파라메터로 추가한다.", new Date().getTime(), jobParameters.getDate(RUN_DATE_PARAMETER).getTime(), 1000);
     }
 
     @Test
     public void testGetNextWithEmptyParameter() {
         JobParameters jobParameters = new SimpleJobParametersIncrementer().getNext(new JobParameters());
-        assertEquals("", new Date().getTime(), jobParameters.getDate(RUN_DATE_PARAMETER).getTime(), 1000);
+        assertEquals("job 파라메터가 empty이면 현재 일시를 job 파라메터로 추가한다.", new Date().getTime(), jobParameters.getDate(RUN_DATE_PARAMETER).getTime(), 1000);
     }
 
     @Test
     public void testGetNextWithSomeParameter() {
         JobParameters jobParameters = new SimpleJobParametersIncrementer().getNext(new JobParametersBuilder().addString("stuff", "thing").toJobParameters());
-        assertEquals("", new Date().getTime(), jobParameters.getDate(RUN_DATE_PARAMETER).getTime(), 1000);
-        assertEquals("", "thing", jobParameters.getString("stuff"));
+        assertEquals("job 파라메터가 존재 하더라도 현재 일시를 job 파라메터로 추가한다.", new Date().getTime(), jobParameters.getDate(RUN_DATE_PARAMETER).getTime(), 1000);
+        assertEquals("기 존재하는 job 파라메터는 그대로 존재해야 한다.", "thing", jobParameters.getString("stuff"));
     }
 }

@@ -2,15 +2,12 @@ package kr.pe.jady.store.batch.config.spring.jpa;
 
 import kr.pe.jady.store.batch.config.spring.app.DataSourceConfig;
 import kr.pe.jady.store.batch.config.spring.app.JpaConfig;
-import org.hibernate.jpa.AvailableSettings;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.orm.jpa.JpaTransactionManager;
-import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
-import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.PlatformTransactionManager;
 
@@ -27,7 +24,7 @@ import java.util.Properties;
 public class ReadLogJpaConfig {
     @Bean
     public EntityManagerFactory readLogEntityManagerFactory(Properties jpaProperties, DataSource readLogDataSource) {
-        return JpaConfig.entityManagerFactoryBeanFactory(jpaProperties, readLogDataSource).getObject();
+        return JpaConfig.entityManagerFactoryBeanFactory(jpaProperties, readLogDataSource, "readLog").getObject();
     }
 
     @Bean

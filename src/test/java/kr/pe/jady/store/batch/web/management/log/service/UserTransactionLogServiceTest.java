@@ -1,8 +1,6 @@
 package kr.pe.jady.store.batch.web.management.log.service;
 
 import kr.pe.jady.store.batch.config.spring.app.AppConfig;
-import kr.pe.jady.store.batch.config.spring.app.DataSourceConfig;
-import kr.pe.jady.store.batch.config.spring.app.JpaConfig;
 import kr.pe.jady.store.model.log.UserTransactionLog;
 import org.hamcrest.collection.IsIterableWithSize;
 import org.junit.Before;

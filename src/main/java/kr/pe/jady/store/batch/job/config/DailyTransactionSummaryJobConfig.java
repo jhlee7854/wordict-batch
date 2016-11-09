@@ -1,6 +1,5 @@
 package kr.pe.jady.store.batch.job.config;
 
-import kr.pe.jady.store.batch.system.util.SimpleJobParametersIncrementer;
 import kr.pe.jady.store.model.summary.DailyTransactionSummary;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
@@ -32,17 +31,20 @@ public class DailyTransactionSummaryJobConfig {
     private ItemReader<DailyTransactionSummary> toWriteDailyTransactionSummaryLogReader;
 
     @Autowired
+    private ItemReader<DailyTransactionSummary> userTransactionLogGroupByTypeReader;
+
+    @Autowired
     private ItemWriter<DailyTransactionSummary> dailyTransactionSummaryWriter;
 
     @Bean
-    public Job dailyTransactionSummaryJob() {
+    public Job dailyTransactionSummaryJob() throws Exception {
         return jobBuilderFactory.get(JOB_NAME)
                 .start(dailyTransactionSummaryStep())
                 .build();
     }
 
     @Bean
-    public Step dailyTransactionSummaryStep() {
+    public Step dailyTransactionSummaryStep() throws Exception {
         return stepBuilderFactory.get(STEP_NAME)
                 .<DailyTransactionSummary, DailyTransactionSummary>chunk(4)
                 .reader(toWriteDailyTransactionSummaryLogReader)

@@ -71,4 +71,16 @@ public class UserTransactionLog {
     public void setCreated(Date created) {
         this.created = created;
     }
+
+    @Override
+    public String toString() {
+        return "UserTransactionLog{" +
+                "id=" + id +
+                ", userId='" + userId + '\'' +
+                ", stockId=" + stockId +
+                ", type=" + type +
+                ", amount=" + amount +
+                ", created=" + created +
+                '}';
+    }
 }

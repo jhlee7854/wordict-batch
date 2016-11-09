@@ -63,4 +63,16 @@ public class DailyTransactionSummary {
     public void setCreated(Date created) {
         this.created = created;
     }
+
+    @Override
+    public String toString() {
+        return "DailyTransactionSummary{" +
+                "id=" + id +
+                ", date=" + date +
+                ", type=" + type +
+                ", count=" + count +
+                ", amount=" + amount +
+                ", created=" + created +
+                '}';
+    }
 }

@@ -1,7 +1,7 @@
 package kr.pe.jady.store.batch.job.config;
 
-import kr.pe.jady.store.batch.config.spring.app.*;
-import kr.pe.jady.store.batch.config.spring.batch.BatchConfig;
+import kr.pe.jady.store.batch.config.spring.app.AppConfig;
+import kr.pe.jady.store.batch.config.spring.app.DataSourceTestConfig;
 import kr.pe.jady.store.batch.system.util.DateUtil;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -13,8 +13,6 @@ import org.springframework.batch.core.repository.JobRepository;
 import org.springframework.batch.test.JobLauncherTestUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.jdbc.datasource.DriverManagerDataSource;
-import org.springframework.mock.jndi.SimpleNamingContextBuilder;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
@@ -42,11 +40,7 @@ public class DailyTransactionSummaryJobTest {
 
     @BeforeClass
     public static void setUpClass() throws NamingException {
-        SimpleNamingContextBuilder.emptyActivatedContextBuilder().bind("jdbc/batch", new DriverManagerDataSource("jdbc:h2:mem:testdb", "sa", ""));
-        SimpleNamingContextBuilder.getCurrentContextBuilder().bind("jdbc/readLog", new DriverManagerDataSource("jdbc:h2:mem:testdb", "sa", ""));
-        SimpleNamingContextBuilder.getCurrentContextBuilder().bind("jdbc/writeLog", new DriverManagerDataSource("jdbc:h2:mem:testdb", "sa", ""));
-        SimpleNamingContextBuilder.getCurrentContextBuilder().bind("jdbc/readSummary", new DriverManagerDataSource("jdbc:h2:mem:testdb", "sa", ""));
-        SimpleNamingContextBuilder.getCurrentContextBuilder().bind("jdbc/writeSummary", new DriverManagerDataSource("jdbc:h2:mem:testdb", "sa", ""));
+        DataSourceTestConfig.buildNamingContext();
     }
 
     @Before

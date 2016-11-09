@@ -1,5 +1,6 @@
 .idea
 src/main/webapp/META-INF/
+generated
 
 # Created by .ignore support plugin (hsz.mobi)
 ### Maven template

@@ -1,6 +1,7 @@
 plugins {
     id 'war'
     id 'org.akhikhl.gretty' version '1.4.0'
+    id 'idea'
 }
 
 sourceCompatibility = 1.8
@@ -37,6 +38,8 @@ dependencies {
 
     compile "org.springframework.data:spring-data-jpa:${springDataVersion}"
     compile "org.hibernate:hibernate-entitymanager:${hibernateVersion}"
+    compile "com.mysema.querydsl:querydsl-jpa:3.7.2"
+    compile "com.mysema.querydsl:querydsl-apt:3.7.2:jpa"
 }
 
 gretty {
@@ -46,4 +49,11 @@ gretty {
     port = 8089
     contextPath = '/'
     contextConfigFile = 'src/main/webapp/META-INF/tomcat-context.xml'
+}
+
+idea {
+    module {
+        sourceDirs += file('src/main/generated')
+        generatedSourceDirs += file('src/main/generated')
+    }
 }

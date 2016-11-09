@@ -2,17 +2,10 @@ package kr.pe.jady.store.batch.config.spring.app;
 
 import org.hibernate.jpa.AvailableSettings;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
-import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
-import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
-import org.springframework.stereotype.Repository;
-import org.springframework.transaction.PlatformTransactionManager;
 
-import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
 import java.util.Properties;
 
@@ -31,11 +24,12 @@ public class JpaConfig {
         return properties;
     }
 
-    public static LocalContainerEntityManagerFactoryBean entityManagerFactoryBeanFactory(Properties jpaProperties, DataSource dataSource) {
+    public static LocalContainerEntityManagerFactoryBean entityManagerFactoryBeanFactory(Properties jpaProperties, DataSource dataSource, String persistenceUnitName) {
         HibernateJpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
         vendorAdapter.setGenerateDdl(true);
 
         LocalContainerEntityManagerFactoryBean factoryBean = new LocalContainerEntityManagerFactoryBean();
+        factoryBean.setPersistenceUnitName(persistenceUnitName);
         factoryBean.setJpaProperties(jpaProperties);
         factoryBean.setJpaVendorAdapter(vendorAdapter);
         factoryBean.setPackagesToScan("kr.pe.jady.store.model");

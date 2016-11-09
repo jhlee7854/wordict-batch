@@ -1,19 +1,8 @@
 package kr.pe.jady.store.batch.config.spring.app;
 
-import kr.pe.jady.store.batch.system.annotation.LogReadMapper;
-import kr.pe.jady.store.batch.system.annotation.LogWriteMapper;
-import kr.pe.jady.store.batch.system.annotation.SummaryReadMapper;
-import kr.pe.jady.store.batch.system.annotation.SummaryWriteMapper;
-import org.apache.ibatis.session.ExecutorType;
-import org.apache.ibatis.session.SqlSessionFactory;
 import org.mybatis.spring.SqlSessionFactoryBean;
-import org.mybatis.spring.SqlSessionTemplate;
 import org.mybatis.spring.mapper.MapperScannerConfigurer;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
-import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import javax.sql.DataSource;
 import java.io.IOException;
